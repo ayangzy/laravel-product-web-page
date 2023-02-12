@@ -10,6 +10,28 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 class ProductService
 {
 
+    public function fetchProducts()
+    {
+        $xmlFile = 'product_data.xml';
+
+        $totalValueSum = 0;
+        //Check if file does not exists or the data in it is empty
+        if (!file_exists($xmlFile) || filesize($xmlFile) === 0) {
+            return view('products.index', compact('totalValueSum'));
+        }
+
+        //Fetch the data from the file
+        $xml = simplexml_load_file('product_data.xml');
+        $products = $xml->xpath('/product_data/product');
+
+        //Fetch latest created products based on the datetime
+        usort($products, function ($a, $b) {
+            return strtotime($b->datetime) - strtotime($a->datetime);
+        });
+
+        return $products;
+    }
+
     public function storeProduct($request)
     {
         //Get the request body

@@ -4,8 +4,17 @@
     <id>1</id>
     <product_name>Jeans tro</product_name>
     <quantity_in_stock>5</quantity_in_stock>
-    <price_per_item>21</price_per_item>
+    <price_per_item>29</price_per_item>
     <datetime>2023-02-12 13:50:40</datetime>
-    <total_value>105</total_value>
-  <datatime>2023-02-12 13:53:59</datatime></product>
+    <total_value>145</total_value>
+    <datatime>2023-02-12 14:09:48</datatime>
+  </product>
+  <product>
+    <id>2</id>
+    <product_name>test</product_name>
+    <quantity_in_stock>4</quantity_in_stock>
+    <price_per_item>20</price_per_item>
+    <datetime>2023-02-12 14:10:39</datetime>
+    <total_value>80</total_value>
+  <datatime>2023-02-12 14:17:25</datatime></product>
 </product_data>
