@@ -19,5 +19,6 @@ use App\Http\Controllers\ProductController;
 Route::prefix('v1')->group(function () {
     Route::prefix('products')->name('product.')->group(function () {
         Route::post('', [ProductController::class, 'store'])->name('store');
+        Route::post('/{id}', [ProductController::class, 'update'])->name('update');
     });
 });

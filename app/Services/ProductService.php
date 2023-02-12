@@ -70,4 +70,36 @@ class ProductService
 
         return $product;
     }
+
+
+    public function updateProduct($request, $id)
+    {
+        //Get the request body
+        $productName = $request->input('product_name');
+        $quantityInStock = $request->input('quantity_in_stock');
+        $pricePerItem = $request->input('price_per_item');
+        $datetime = Carbon::now();
+        $totalValue = $quantityInStock * $pricePerItem;
+
+        //load data from the xml file
+        $xml = simplexml_load_file("product_data.xml");
+
+        $exists = false;
+        //loop through the data and update based on the selected ID
+        foreach ($xml->product as $product) {
+            if ($product->id == $id) {
+                $product->product_name =  $productName;
+                $product->quantity_in_stock =  $quantityInStock;
+                $product->price_per_item =  $pricePerItem;
+                $product->datatime = $datetime->toDateTimeString();
+                $product->total_value = $totalValue;
+                break;
+            }
+        }
+
+        //Save the changes to the XML file
+        $xml->asXML('product_data.xml');
+
+        return $product;
+    }
 }
