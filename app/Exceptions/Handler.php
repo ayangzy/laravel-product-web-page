@@ -2,11 +2,18 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Traits\ApiResponses;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponses;
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -22,7 +29,7 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+        BadRequestException::class,
     ];
 
     /**
@@ -46,5 +53,33 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (Throwable $exception, $request) {
+            return $this->handleException($exception, $request);
+        });
+    }
+
+
+    public function handleException(Throwable $exception, $request)
+    {
+        if ($exception instanceof ValidationException) {
+            return $this->validationResponse($exception->errors());
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return $this->notFoundResponse('Unable to locate model resource', 'model_not_found');
+        }
+
+        if ($exception instanceof RouteNotFoundException) {
+            return $this->notFoundResponse($exception->getMessage());
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->notFoundResponse("We cannot access the resource you are looking for");
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->badRequestResponse($exception->getMessage());
+        }
     }
 }
