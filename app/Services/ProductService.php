@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 class ProductService
 {
 
+    /**
+     * Handle logic to fetch products saved in the XML file
+     */
     public function fetchProducts()
     {
         $xmlFile = 'product_data.xml';
@@ -32,6 +35,12 @@ class ProductService
         return $products;
     }
 
+    /**
+     * Hand logic to upload product data to xml file
+     * 
+     * @param mixed $request
+     * @return \SimpleXMLElement|false|null
+     */
     public function storeProduct($request)
     {
         //Get the request body
@@ -94,6 +103,13 @@ class ProductService
     }
 
 
+    /**
+     * Handle logic to update product data to xml file
+     * 
+     * @param mixed $request
+     * @param mixed $id
+     * @return mixed
+     */
     public function updateProduct($request, $id)
     {
         //Get the request body

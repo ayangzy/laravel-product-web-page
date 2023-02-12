@@ -26,6 +26,17 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'totalValueSum'));
     }
 
+    /**
+     * Load products data from xml and display to view real time when an product is created or updated
+     */
+    public function productData()
+    {
+        $products = $this->productService->fetchProducts();
+
+        $totalValueSum = $this->calculateTotalValueSum($products);
+
+        return view('products._product-data', compact('products', 'totalValueSum'));
+    }
 
     /**
      * Return store product response
